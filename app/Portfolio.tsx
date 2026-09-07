@@ -453,7 +453,7 @@ export default function Portfolio() {
         </section>
 
         <section className="section contact" id="contact">
-          <div className="contact-backdrop" aria-hidden="true">LET'S CUT</div>
+          <div className="contact-backdrop" aria-hidden="true">LETS CUT</div>
           <div className="section-label reveal"><span>05</span> CONTACT</div>
           <div className="contact-grid">
             <div className="contact-main reveal">
