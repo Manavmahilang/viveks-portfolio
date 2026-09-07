@@ -54,9 +54,9 @@ const DATA: PortfolioData = {
   officeYears: "2+",
   freelanceYears: "4+",
   heroExperience: "4+ YEARS",
-  heroVideo: "ter9sscwsoscdnew.public.blob.vercel-storage.com/hero-portfolio.mp4",
-  heroPoster: "ter9sscwsoscdnew.public.blob.vercel-storage.com/hero-poster.jpg",
-  portrait: "ter9sscwsoscdnew.public.blob.vercel-storage.com/my-photo.png",
+  heroVideo: "https://ter9sscwsoscdnew.public.blob.vercel-storage.com/hero-portfolio.mp4",
+  heroPoster: "https://ter9sscwsoscdnew.public.blob.vercel-storage.com/hero-poster.jpg",
+  portrait: "https://ter9sscwsoscdnew.public.blob.vercel-storage.com/my-photo.png",
   aboutHeadline: "I turn raw footage into stories people stop scrolling for.",
   aboutParagraphs: [
     "I’m a professional video editor focused on short-form content, social-first storytelling and high-retention visual pacing.",
@@ -65,7 +65,7 @@ const DATA: PortfolioData = {
   ],
   resumeUrl:
     "https://docs.google.com/document/d/1GnNugoOL2NgF3ofaxOfHDQnLQpuENqeEawtvQUzjPJw/edit?usp=sharing",
-  showreelVideo: "ter9sscwsoscdnew.public.blob.vercel-storage.com/showreel.mp4",
+  showreelVideo: "https://ter9sscwsoscdnew.public.blob.vercel-storage.com/showreel.mp4",
   skills: [
     { name: "Adobe After Effects", short: "AE", level: 95, note: "Motion • Compositing • Typography" },
     { name: "Adobe Premiere Pro", short: "PR", level: 95, note: "Editing • Pacing • Audio • Delivery" },
@@ -77,8 +77,8 @@ const DATA: PortfolioData = {
     title: `Reel ${String(i + 1).padStart(2, "0")}`,
     type: "reel",
     category: "Short-form",
-    video: `ter9sscwsoscdnew.public.blob.vercel-storage.com/reel-${String(i + 1).padStart(2, "0")}.mp4`,
-    poster: `ter9sscwsoscdnew.public.blob.vercel-storage.com/reel-${String(i + 1).padStart(2, "0")}.png`
+    video: `https://ter9sscwsoscdnew.public.blob.vercel-storage.com/reel-${String(i + 1).padStart(2, "0")}.mp4`,
+    poster: `https://ter9sscwsoscdnew.public.blob.vercel-storage.com/reel-${String(i + 1).padStart(2, "0")}.png`
   })),
   contact: {
     email: "fxvivekkumar@gmail.com",
