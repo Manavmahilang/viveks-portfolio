@@ -22,7 +22,6 @@ type Contact = {
   email: string;
   phoneDisplay: string;
   phoneLink: string;
-  instagram: string;
   linkedin: string;
   location: string;
 };
@@ -55,9 +54,9 @@ const DATA: PortfolioData = {
   officeYears: "2+",
   freelanceYears: "4+",
   heroExperience: "4+ YEARS",
-  heroVideo: "/assets/hero-portfolio.mp4",
-  heroPoster: "/assets/hero-poster.jpg",
-  portrait: "/assets/my-photo.png",
+  heroVideo: "ter9sscwsoscdnew.public.blob.vercel-storage.com/hero-portfolio.mp4",
+  heroPoster: "ter9sscwsoscdnew.public.blob.vercel-storage.com/hero-poster.jpg",
+  portrait: "ter9sscwsoscdnew.public.blob.vercel-storage.com/my-photo.png",
   aboutHeadline: "I turn raw footage into stories people stop scrolling for.",
   aboutParagraphs: [
     "I’m a professional video editor focused on short-form content, social-first storytelling and high-retention visual pacing.",
@@ -66,7 +65,7 @@ const DATA: PortfolioData = {
   ],
   resumeUrl:
     "https://docs.google.com/document/d/1GnNugoOL2NgF3ofaxOfHDQnLQpuENqeEawtvQUzjPJw/edit?usp=sharing",
-  showreelVideo: "/assets/showreel.mp4",
+  showreelVideo: "ter9sscwsoscdnew.public.blob.vercel-storage.com/showreel.mp4",
   skills: [
     { name: "Adobe After Effects", short: "AE", level: 95, note: "Motion • Compositing • Typography" },
     { name: "Adobe Premiere Pro", short: "PR", level: 95, note: "Editing • Pacing • Audio • Delivery" },
@@ -78,14 +77,13 @@ const DATA: PortfolioData = {
     title: `Reel ${String(i + 1).padStart(2, "0")}`,
     type: "reel",
     category: "Short-form",
-    video: `/assets/reel-${String(i + 1).padStart(2, "0")}.mp4`,
-    poster: `/assets/reel-${String(i + 1).padStart(2, "0")}.jpg`
+    video: `ter9sscwsoscdnew.public.blob.vercel-storage.com/reel-${String(i + 1).padStart(2, "0")}.mp4`,
+    poster: `ter9sscwsoscdnew.public.blob.vercel-storage.com/reel-${String(i + 1).padStart(2, "0")}.png`
   })),
   contact: {
     email: "fxvivekkumar@gmail.com",
     phoneDisplay: "+91 799119 4839",
     phoneLink: "+91799119 4839",
-    instagram: "https://instagram.com/yourusername",
     linkedin: "https://www.linkedin.com/in/vivek-kumar-singh-455901240",
     location: "India • Available remotely"
   }
@@ -98,6 +96,7 @@ export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [topbarVisible, setTopbarVisible] = useState(false);
   const glowRef = useRef<HTMLDivElement | null>(null);
+  const reelVideoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
 
   useEffect(() => {
     const onScroll = () =>
@@ -151,9 +150,33 @@ export default function Portfolio() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
-  const modalVideo = selectedProject?.video || (showreelOpen ? DATA.showreelVideo : null);
+  const modalVideo =
+  selectedProject?.video ??
+  (showreelOpen ? DATA.showreelVideo : undefined);
   const modalTitle = selectedProject?.title || "Showreel";
   const modalType = selectedProject?.category || "SHOWREEL";
+
+  const startReelPreview = (title: string) => {
+    const video = reelVideoRefs.current[title];
+    if (!video) return;
+
+    video.currentTime = 0;
+    video.muted = true;
+
+    const playPromise = video.play();
+    if (playPromise) {
+      playPromise.catch(() => { });
+    }
+  };
+
+  const stopReelPreview = (title: string) => {
+    const video = reelVideoRefs.current[title];
+    if (!video) return;
+
+    video.pause();
+    video.currentTime = 0;
+
+  };
 
   return (
     <>
@@ -193,6 +216,7 @@ export default function Portfolio() {
         <section className="hero" id="home">
           <video
             className="hero-video"
+            aria-hidden="true"
             autoPlay
             muted
             loop
@@ -272,43 +296,61 @@ export default function Portfolio() {
               </div>
 
               <div className="about-actions">
-                <a href={DATA.resumeUrl} className="text-link" target="_blank" rel="noreferrer">View Resume <span>↗</span></a>
-                <a href="#contact" className="text-link">Start a Project <span>↗</span></a>
+                <a
+                  href="/assets/resume.pdf"
+                  className="text-link"
+                  download="Vivek-Resume.pdf"
+                >
+                  Download Resume <span>↓</span>
+                </a>
+
+                <a href="#contact" className="text-link">
+                  Start a Project <span>↗</span>
+                </a>
               </div>
             </div>
           </div>
         </section>
 
         <section className="showreel section" id="showreel">
-          <div className="section-label reveal"><span>02</span> SHOWREEL</div>
+          <div className="section-label reveal">
+            <span>02</span> SHOWREEL
+          </div>
+
           <div className="showreel-head reveal">
             <p className="kicker">SELECTED MOTION</p>
             <h2>60 seconds should be enough.</h2>
-            <p>A compact look at pacing, motion design, sound, transitions, visual rhythm and storytelling.</p>
+            <p>
+              A compact look at pacing, motion design, sound, transitions, visual
+              rhythm and storytelling.
+            </p>
           </div>
 
           <button
             className="showreel-player reveal"
             type="button"
-            aria-label="Play showreel"
+            aria-label="Open showreel"
             onClick={() => setShowreelOpen(true)}
           >
             <video
               muted
+              autoPlay
               loop
               playsInline
-              autoPlay
-              preload="metadata"
+              preload="auto"
               src={DATA.showreelVideo}
-              onLoadedData={(e) => e.currentTarget.play().catch(() => {})}
-              onError={(e) => (e.currentTarget.style.display = "none")}
+              onLoadedMetadata={(e) => {
+                e.currentTarget.muted = true;
+                e.currentTarget.play().catch(() => { });
+              }}
+              onCanPlay={(e) => {
+                e.currentTarget.muted = true;
+                e.currentTarget.play().catch(() => { });
+              }}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
             />
-            <div className="showreel-placeholder">
-              <span>ADD SHOWREEL VIDEO</span>
-              <small>assets/showreel.mp4</small>
-            </div>
-            <span className="play-disc"><b>▶</b></span>
-            <span className="player-caption">PLAY SHOWREEL</span>
           </button>
         </section>
 
@@ -318,9 +360,10 @@ export default function Portfolio() {
             <div className="skills-copy reveal">
               <p className="kicker">EDITING STACK</p>
               <h2>Tools are only useful when the cut feels right.</h2>
-              <p>These bars are intentionally easy to edit. Change the values in <strong>app/Portfolio.jsx</strong> and the website updates automatically.</p>
+
 
               <TiltCard>
+
                 <div className="ai-icon">✦</div>
                 <div>
                   <span>AI VIDEO</span>
@@ -377,13 +420,31 @@ export default function Portfolio() {
                     if (e.key === "Enter" || e.key === " ") setSelectedProject(project);
                   }}
                 >
-                  <div className="project-media">
-                    <img src={project.poster} alt={`${project.title} thumbnail`} onError={(e) => (e.currentTarget.style.display = "none")} />
-                    <div className="project-placeholder">
-                      <span>9:16 REEL</span>
-                      <small>{project.poster}</small>
-                    </div>
-                    <div className="project-overlay"><span className="project-index">{String(i + 1).padStart(2, "0")}</span></div>
+                  <div
+                    className="project-media"
+                    onMouseEnter={() => startReelPreview(project.title)}
+                    onMouseLeave={() => stopReelPreview(project.title)}
+                    onFocus={() => startReelPreview(project.title)}
+                    onBlur={() => stopReelPreview(project.title)}
+                  >
+                    <img
+                      className="project-poster"
+                      src={project.poster}
+                      alt={`${project.title} thumbnail`}
+                      onError={(e) => (e.currentTarget.style.display = "none")}
+                    />
+                    <video
+                      ref={(node) => {
+                        reelVideoRefs.current[project.title] = node;
+                      }}
+                      className="project-preview"
+                      src={project.video}
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="project-info"><h3>{project.title}</h3><span>{project.category}</span></div>
                 </article>
@@ -408,8 +469,7 @@ export default function Portfolio() {
                 <a href={`tel:${DATA.contact.phoneLink}`}>{DATA.contact.phoneDisplay}</a>
               </div>
               <div className="contact-block">
-                <span>SOCIALS</span>
-                <a href={DATA.contact.instagram} target="_blank" rel="noreferrer">Instagram ↗</a>
+                <span>SOCIAL</span>
                 <a href={DATA.contact.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
               </div>
               <div className="contact-block">

@@ -1,0 +1,11 @@
+Add your portfolio media to this folder.
+
+Expected default filenames:
+hero-portfolio.mp4
+hero-poster.jpg
+my-photo.png
+showreel.mp4
+reel-01.mp4 ... reel-08.mp4
+reel-01.jpg ... reel-08.jpg
+podcast-intro.mp4
+podcast-intro.jpg
